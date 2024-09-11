@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url(7.jpg);
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        a {
+            color: rgb(47, 0, 255); 
+            padding: 30px;
+            text-decoration: none;
+        }
+        a:hover {
+            color: gray;
+        }
+        .search-container {
+            max-width: 100%;
+            padding: 10px;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 0 0 10px 10px;
+            display: block;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            width: 40rem;
+            margin: 0 auto;
+        }
+        .card-container {
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0);
+            border: none;
+            text-align: center;
+        }
+        .form-control {
+            border-radius: 8px;
+        }
+        .btn {
+            border-radius: 8px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-color: #ced4da6a;
+        }
+        .logo-img {
+            height: 40px;
+            width: auto;
+            margin: 0 35px;
+        }
+        .center-logo {
+            height: 60px;
+        }
+        @media (max-width: 576px) {
+            .search-box {
+                width: 100%;
+                padding: 0;
+            }
+            .center-logo {
+                height: 40px;
+            }
+            .logo-img {
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-container">
+        <img src="sec round logo.png" alt="Left Image" class="logo-img">
+        <img src="saveetha logo-3.png" alt="Logo" class="center-logo">
+        <img src="sec round logo.png" alt="Right Image" class="logo-img">
+    </div>
+
+    <div class="container search-container">
+        <form onsubmit="searchBus(event)">
+            <div class="search-box">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search Your Bus....">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+    </div><br>
+
+    <div class="container card-container">
+        <div class="row">
+            <div class="col-6 col-lg-3 mb-3">
+                <div class="card">
+                    <a href="Yourbus.html">
+                        <img src="1.png" class="card-img-top" alt="Bus Image">
+                        <div class="card-title">Your Bus</div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 mb-3">
+                <div class="card">
+                    <a href="http://simatstransport.saveetha.com/viewPass.php">
+                        <img src="2.png" class="card-img-top" alt="Bus Image">
+                        <div class="card-title">Bus Pass</div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 mb-3">
+                <div class="card">
+                    <div onclick="confirmEmergencyCall()">
+                        <img src="3.png" class="card-img-top" alt="Bus Image">
+                        <div class="card-title special-title">Emergency</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 mb-3">
+                <div class="card">
+                    <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProfile" aria-controls="offcanvasProfile">
+                        <img src="4.png" class="card-img-top" alt="Profile Image">
+                        <div class="card-title">Profile</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offcanvas Profile -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProfile" aria-labelledby="offcanvasProfileLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasProfileLabel">Profile</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <h5>Username: <span id="username"></span></h5>
+            <h5>Email: <span id="email"></span></h5>
+            <h5>Register Number: <span id="registerNumber"></span></h5>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            
+            if (userData) {
+                document.getElementById('username').textContent = userData.username;
+                document.getElementById('email').textContent = userData.email;
+                document.getElementById('registerNumber').textContent = userData.registerNumber;
+            }
+        });
+
+        function confirmEmergencyCall() {
+            if (confirm("Are you sure you want to call the emergency contact?")) {
+                alert("Calling emergency number...");
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

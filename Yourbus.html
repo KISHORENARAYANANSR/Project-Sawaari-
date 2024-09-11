@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bus</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url('bgpic3.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .container {
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .bus-info {
+            margin-top: 20px;
+        }
+        .card {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-body {
+            position: relative;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+        .view-details-btn {
+            display: none;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+        }
+        .view-details-btn:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+        .card-title {
+            margin-bottom: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="text-center">Your Bus</h2>
+
+        <div class="bus-info" id="bus-info">
+            <!-- Default Bus Information -->
+        </div>
+
+        <!-- Reset Button -->
+        <button id="reset-btn" class="btn btn-warning hidden" onclick="resetBusRoute()">Reset Default Bus Route</button>
+
+        <div class="row mt-4" id="bus-cards-container">
+            <!-- Bus route cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Inline JavaScript -->
+    <script>
+        // Array of bus routes for demonstration
+        const busRoutes = [
+            'Aminijikarai', 'Anna Nagar-1', 'Anna Nagar-2', 'Arakonnam-1', 'Arakonnam-2', 'Arcot', 'Arul Nagar', 'Avadi Veltech', 'Ayapakkam', 'Chengalpet', 'Chintadripet',
+            'Choolai', 'Choolaimedu', 'CMBT', 'Ennore', 'Foreshore Estate', 'GRT', 'Guindy', 'Hasthinapuram', 'IOC', 'Kadambathur', 'Kanchipuram-1', 'Kanchipuram-2', 'Kanchipuram-3',
+            'Kanchipuram-4', 'Kanchipuram-5', 'Kelambakkam', 'KK Nagar', 'Korattur', 'Kundrathur', 'Light house', 'Madhavaram Milk colony', 'Manali', 'Medavakkam', 'Moolakadai',
+            'MR Nagar', 'Nesapakkam', 'Oragadam', 'Pallavaram', 'Pallikaranai', 'Pattabiram', 'Perambur', 'Purasaiwakkam', 'Puzhal Camp', 'Redhills', 'Retteri', 'Selaiyur',
+            'Sholinghur', 'SRMC', 'T Nagar', 'Tachur X Road', 'Tambaram', 'Thakkolam', 'Thirumullaivoyal', 'Thirunindravur', 'Thiruttani', 'Thiruvallur', 'Toll Gate', 'Tondairpet',
+            'TVK Nagar', 'ValluvarKottam', 'Vandalur', 'VGP', 'Velachery-2', 'Walaja', 'Welding Shop'
+        ];
+
+        // Function to create and display bus route cards
+        function displayBusCards(routes) {
+            const container = document.getElementById('bus-cards-container');
+            container.innerHTML = ''; // Clear existing cards
+
+            routes.forEach(route => {
+                const card = document.createElement('div');
+                card.className = 'card col-md-3 m-2';
+                card.style.width = '18rem';
+                card.style.cursor = 'pointer';
+                card.style.backgroundColor = '#ced4da6a';
+                card.onclick = () => setBusRoute(route);
+
+                const img = document.createElement('img');
+                img.src = 'buspic.png';
+                img.className = 'card-img-top';
+                img.alt = '...';
+
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body text-center';
+
+                const title = document.createElement('h3');
+                title.className = 'card-title';
+                title.innerText = route;
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'button-container';
+
+                const viewDetailsButton = document.createElement('a');
+                viewDetailsButton.className = 'view-details-btn';
+                viewDetailsButton.href = `bus-details.html?name=${encodeURIComponent(route)}`;
+                viewDetailsButton.innerText = 'View Details'; // Just text, no image
+
+                buttonContainer.appendChild(viewDetailsButton);
+                cardBody.appendChild(title);
+                cardBody.appendChild(buttonContainer);
+                card.appendChild(img);
+                card.appendChild(cardBody);
+                container.appendChild(card);
+            });
+        }
+
+        // Load default bus route from local storage
+        window.onload = function() {
+            const busDetails = localStorage.getItem('busDetails');
+            if (busDetails) {
+                document.getElementById('bus-info').innerText = `Default Bus Route: ${busDetails}`;
+                hideOtherCards(busDetails);
+                document.getElementById('reset-btn').style.display = 'block'; // Show reset button
+            } else {
+                document.getElementById('bus-info').innerText = 'No default bus set. Please select a bus route.';
+                document.getElementById('reset-btn').style.display = 'none'; // Hide reset button
+            }
+
+            displayBusCards(busRoutes); // Display bus cards on page load
+        };
+
+        // Function to set and save the selected bus route
+        function setBusRoute(busRoute) {
+            if (busRoute) {
+                localStorage.setItem('busDetails', busRoute); // Save bus route in local storage
+                document.getElementById('bus-info').innerText = `Default Bus Route: ${busRoute}`;
+                hideOtherCards(busRoute);
+                document.getElementById('reset-btn').style.display = 'block'; // Show reset button
+            }
+        }
+
+        // Function to hide other cards and show only the selected bus card
+        function hideOtherCards(selectedRoute) {
+            const cards = document.getElementsByClassName('card');
+            for (let card of cards) {
+                if (!card.innerText.includes(selectedRoute)) {
+                    card.style.display = 'none';
+                } else {
+                    card.querySelector('.view-details-btn').style.display = 'inline-block'; // Show view details button
+                }
+            }
+        }
+
+        // Function to reset the selected bus route
+        function resetBusRoute() {
+            localStorage.removeItem('busDetails'); // Clear saved bus route
+            document.getElementById('bus-info').innerText = 'No default bus set. Please select a bus route.';
+            const cards = document.getElementsByClassName('card');
+            for (let card of cards) {
+                card.style.display = 'block'; // Show all cards again
+                card.querySelector('.view-details-btn').style.display = 'none'; // Hide view details button
+            }
+            document.getElementById('reset-btn').style.display = 'none'; // Hide reset button
+        }
+    </script>
+</body>
+</html>
